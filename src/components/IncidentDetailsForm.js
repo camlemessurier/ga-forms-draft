@@ -1,49 +1,92 @@
 import React from "react";
 import { Form, Header } from "semantic-ui-react";
+import { Field, reduxForm } from "redux-form";
 
-const IncidentDetailsForm = () => {
+const renderTextArea = (field) => (
+	<Form.TextArea
+		{...field.input}
+		label={field.label}
+		placeholder={field.placeholder}
+	/>
+);
+
+const renderCheckbox = (field) => (
+	<Form.Checkbox
+		checked={!!field.input.value}
+		name={field.input.name}
+		label={field.label}
+		onChange={(e, { checked }) => field.input.onChange(checked)}
+	/>
+);
+
+const IncidentDetailsForm = (props) => {
 	return (
 		<>
 			<Header as="h2"> Incident Details</Header>
-			<Form.Field>
-				<label>Incident Title (10 words or less)</label>
-				<input name="incident_title" placeholder="Incident Title" />
-			</Form.Field>
-			<Form.Field>
-				<label>Time</label>
-				<input name="incident_time" type="time" />
-			</Form.Field>
-			<Form.Field>
-				<label>Location</label>
-				<input name="incident_location" placeholder="Location" />
-			</Form.Field>
-			<Form.Field>
-				<label>Describe in detail what happened and how</label>
-				<textarea
-					name="incident_details"
-					placeholder="Describe in detail what happened and how"
-				/>
-			</Form.Field>
-			<Form.Field>
-				<label>Incident Witnesses</label>
-				<input name="incident_location" placeholder="Location" />
-			</Form.Field>
-			<Form.Field>
-				<label>Incident Witnesses</label>
-				<input name="incident_location" placeholder="Location" />
-			</Form.Field>
+			<Field
+				component={Form.Input}
+				label="Incident Time"
+				name="incident_time"
+				placeholder="Incident Time"
+				type="time"
+			/>
+			<Field
+				component={Form.Input}
+				label="Incident location"
+				name="incident_location"
+				placeholder="Incident location"
+			/>
+			<Field
+				component={renderTextArea}
+				label="Incident Details"
+				name="incident_details"
+				placeholder="Incident Details"
+			/>
+
+			<Field
+				component={Form.Input}
+				label="Incident witnesses"
+				name="incident_witnesses"
+				placeholder="Incident witnesses"
+			/>
 			<Form.Group grouped>
-				<label>Risk Controls Completed</label>
-				<Form.Checkbox label="SWMS" name="SWMS_completed" />
-				<Form.Checkbox label="Take 5" name="take5_completed" />
-				<Form.Checkbox label="Fatigue Plan" name="fatigue_plan_followed" />
-				<Form.Checkbox
-					label="Site Specific Procedures"
+				<h4>Completed:</h4>
+				<Field component={renderCheckbox} label="SWMS" name="SWMS_completed" />
+				<Field
+					component={renderCheckbox}
+					label="Take5"
+					name="take5_completed"
+				/>
+				<Field
+					component={renderCheckbox}
+					label="Fatigue plan"
+					name="fatigue_plan_completed"
+				/>
+				<Field
+					component={renderCheckbox}
+					label="Site procedures followed"
 					name="site_procedures_followed"
+				/>
+			</Form.Group>
+			<Form.Group grouped>
+				<h4>Outcome of incident</h4>
+				<Field
+					component={renderCheckbox}
+					label="Injury"
+					name="incident_injury"
+					defaultChecked="false"
+				/>
+				<Field
+					component={renderCheckbox}
+					label="Equipment Damage"
+					name="incident_equip_damage"
+					value="false"
 				/>
 			</Form.Group>
 		</>
 	);
 };
 
-export default IncidentDetailsForm;
+export default reduxForm({
+	form: "report",
+})(IncidentDetailsForm);

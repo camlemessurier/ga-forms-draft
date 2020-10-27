@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "semantic-ui-react";
 import ReportSummary from "./ReportSummary";
+import { List } from "semantic-ui-react";
+import axios from "axios";
 
 const ReportSummaryView = () => {
 	const [pageNum, setPageNum] = useState(1);
+	const [reports, setReports] = useState([]);
 
-	const report = {
-		report_title: "gello",
-		report_date: "18",
-		staff_name: "tony",
-	};
+	useEffect(() => {
+		axios.get("/reportsSum").then((result) => {
+			setReports(result.data);
+		});
+	}, []);
 
 	return (
 		<Container style={{ margin: "3em" }}>
-			<ReportSummary {...report} />
-			<ReportSummary {...report} />
+			<List selection divided relaxed className="reportSummaryView">
+				{reports.map((report) => (
+					<ReportSummary {...report} key={report.report_id} />
+				))}
+			</List>
 		</Container>
 	);
 };

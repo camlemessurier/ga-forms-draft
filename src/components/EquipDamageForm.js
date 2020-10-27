@@ -1,24 +1,42 @@
 import React from "react";
 import { Form, Header } from "semantic-ui-react";
+import { Field, reduxForm } from "redux-form";
+
+const renderTextArea = (field) => (
+	<Form.TextArea
+		{...field.input}
+		label={field.label}
+		placeholder={field.placeholder}
+	/>
+);
 
 const EquipDamageForm = () => {
 	return (
 		<>
 			<Header as="h2"> Equipment Damage Details</Header>
-			<Form.Field>
-				<label>Equipment Company</label>
-				<input name="equip_company" placeholder="Equipment Company" />
-			</Form.Field>
-			<Form.Field>
-				<label>Equipment</label>
-				<input name="equip_item" placeholder="GA7, NA28 White Mix 1, etc" />
-			</Form.Field>
-			<Form.Field>
-				<label>Equipment Damage Detail</label>
-				<textarea name="equip_damage_details" />
-			</Form.Field>
+
+			<Field
+				component={renderTextArea}
+				label="Company of equipment"
+				name="equip_company"
+				placeholder="Company of equipment"
+			/>
+			<Field
+				component={Form.Input}
+				label="Equipment Items"
+				name="equip_item"
+				placeholder="Equipment Items"
+			/>
+			<Field
+				component={renderTextArea}
+				label="Equipment damage detail"
+				name="equip_damage"
+				placeholder="Equipment damage detail"
+			/>
 		</>
 	);
 };
 
-export default EquipDamageForm;
+export default reduxForm({
+	form: "report",
+})(EquipDamageForm);

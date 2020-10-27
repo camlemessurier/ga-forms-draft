@@ -10,8 +10,14 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/reports", (req, res) => {
+app.post("/report", (req, res) => {
 	try {
+		// Initialising variables
+		const report_date = new Date().toLocaleString();
+		const review_date = "undefined";
+		const isReviewed = "false";
+		console.log(req.body);
+		// returns undefined if field empty, better way?
 		const {
 			staff_name,
 			staff_email,
@@ -19,10 +25,6 @@ app.post("/reports", (req, res) => {
 			staff_work_arrangement,
 			staff_experience,
 			staff_shift_start,
-
-			//
-
-			incident_title,
 			incident_time,
 			incident_location,
 			incident_details,
@@ -34,24 +36,15 @@ app.post("/reports", (req, res) => {
 			incident_injury,
 			incident_equip_damage,
 			incident_near_miss,
-
-			//
-
 			injury_nature,
 			injury_location,
 			injury_agency,
 			stopped_work,
 			treatment_received,
 			treatment_details,
-
-			//
-
 			equip_company,
 			equip_item,
 			equip_damage,
-
-			//
-
 			causal_factors,
 			recurrence_liklihood,
 			outcome_severity,
@@ -61,7 +54,7 @@ app.post("/reports", (req, res) => {
 			actions_implementer,
 		} = req.body;
 
-		const newIncidentReportQuery = `INSERT INTO incident_reports (staff_name,staff_email,staff_phone,staff_work_arrangement,staff_experience,staff_shift_start,incident_title,incident_time,incident_location,incident_details,incident_witnesses,SWMS_completed,take5_completed,fatigue_plan_completed,site_procedures_followed,incident_injury,incident_equip_damage,incident_near_miss,injury_nature,injury_location,injury_agency,stopped_work,treatment_received,treatment_details,equip_company,equip_item,equip_damage,causal_factors,recurrence_liklihood,outcome_severity,resulting_risk,actions_taken,actions_implemented, actions_implementer) values ('${staff_name}', '${staff_email}','${staff_phone}', '${staff_work_arrangement}','${staff_experience}','${staff_shift_start}', '${incident_title}', '${incident_time}','${incident_location}','${incident_details}','${incident_witnesses}','${SWMS_completed}','${take5_completed}','${fatigue_plan_completed}','${site_procedures_followed}','${incident_injury}','${incident_equip_damage}','${incident_near_miss}','${injury_nature}','${injury_location}','${injury_agency}','${stopped_work}','${treatment_received}','${treatment_details}','${equip_company}','${equip_item}','${equip_damage}', '${causal_factors}', '${recurrence_liklihood}','${outcome_severity}','${resulting_risk}','${actions_taken}','${actions_implemented}','${actions_implementer}')`;
+		const newIncidentReportQuery = `INSERT INTO incident_reports (report_date, staff_name,staff_email,staff_phone,staff_work_arrangement,staff_experience,staff_shift_start,incident_time,incident_location,incident_details,incident_witnesses,SWMS_completed,take5_completed,fatigue_plan_completed,site_procedures_followed,incident_injury,incident_equip_damage,incident_near_miss,injury_nature,injury_location,injury_agency,stopped_work,treatment_received,treatment_details,equip_company,equip_item,equip_damage,causal_factors,recurrence_liklihood,outcome_severity,resulting_risk,actions_taken,actions_implemented, actions_implementer, review_date, isReviewed) values ('${report_date}', '${staff_name}', '${staff_email}','${staff_phone}', '${staff_work_arrangement}','${staff_experience}','${staff_shift_start}', '${incident_time}','${incident_location}','${incident_details}','${incident_witnesses}','${SWMS_completed}','${take5_completed}','${fatigue_plan_completed}','${site_procedures_followed}','${incident_injury}','${incident_equip_damage}','${incident_near_miss}','${injury_nature}','${injury_location}','${injury_agency}','${stopped_work}','${treatment_received}','${treatment_details}','${equip_company}','${equip_item}','${equip_damage}', '${causal_factors}', '${recurrence_liklihood}','${outcome_severity}','${resulting_risk}','${actions_taken}','${actions_implemented}','${actions_implementer}', '${review_date}', '${isReviewed}')`;
 
 		pool.query(newIncidentReportQuery, (error, results, fields) => {
 			if (error) throw error;
@@ -72,22 +65,10 @@ app.post("/reports", (req, res) => {
 	}
 });
 
-// Get all todo
-app.get("/reports", (req, res) => {
-	try {
-		pool.query("SELECT * FROM incident_reports", (err, result, fields) => {
-			if (err) throw err;
-			res.json(result);
-		});
-	} catch (error) {
-		console.log(error.message);
-	}
-});
-
 app.get("/reportsSum", (req, res) => {
 	try {
 		pool.query(
-			"SELECT (report_title, report_date, review_date) FROM incident_reports",
+			"SELECT report_id, staff_name, report_date, isReviewed FROM incident_reports",
 			(err, result, fields) => {
 				if (err) throw err;
 				res.json(result);
@@ -113,8 +94,6 @@ app.get("/report/:report_id", (req, res) => {
 	}
 });
 
-// update a todo
-
 app.put("/report/:id", (req, res) => {
 	try {
 		const { id } = req.params;
@@ -131,7 +110,24 @@ app.put("/report/:id", (req, res) => {
 	}
 });
 
-// delete a todo
+app.put("/report/:report_id/review", (req, res) => {
+	try {
+		const { report_id } = req.params;
+		const { reviewer } = req.body;
+		const review_date = new Date().toLocaleString();
+		const isReviewed = "true";
+		pool.query(
+			`UPDATE incident_reports SET reviewer = '${reviewer}', review_date = '${review_date}', isReviewed = '${isReviewed}' WHERE report_id = ${report_id}`,
+			(err, result, fields) => {
+				if (err) throw err;
+				res.json(result);
+			}
+		);
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 app.delete("/report/:id", (req, res) => {
 	try {
 		const { id } = req.params;
@@ -147,7 +143,6 @@ app.delete("/report/:id", (req, res) => {
 	}
 });
 
-// Server
 app.listen(5000, () => {
 	console.log("server has started on port 5000");
 });

@@ -1,19 +1,16 @@
 
 -- CREATE DATABASE GA;
 USE GA;
-DROP TABLE IF EXISTS incident_reports ;
+DROP TABLE IF EXISTS incident_reports;
 CREATE TABLE incident_reports(
 
     report_id SERIAL PRIMARY KEY,
     report_date TEXT,
-    report_title TEXT, 
-    
     
     -- Staff details --
     staff_name TEXT,
     staff_email TEXT,
     staff_phone TEXT,
-    staff_company TEXT,
     staff_work_status TEXT,
     staff_experience TEXT,
     staff_shift_start TIME,
