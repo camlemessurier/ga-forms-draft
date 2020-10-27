@@ -1,39 +1,52 @@
-import React, { useState, Fragment, useParams } from "react";
+import React, { useState, useParams } from "react";
 import { Form, Container, Header, Button } from "semantic-ui-react";
-import { Field, reduxForm } from "redux-form";
-import { connect } from "react-redux";
 
 // Components
-import IncidentDetailsForm from "./IncidentDetailsForm";
-import StaffDetailsForm from "./StaffDetailsForm";
+
 import InjuryDetailsForm from "./InjuryDetailsForm";
 import EquipDamageForm from "./EquipDamageForm";
-import IncidentInvestigationForm from "./IncidentInvestigationForm";
 import axios from "axios";
+import questions from "../questions";
+import FormField from "./FormField";
 
 const ReportForm = (props) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		axios.post("/report", props.values);
+		axios.post("/report", report);
 		window.location = "/";
 	};
+
+	const [report, setReport] = useState({
+		incident_equip_damage: true,
+		incident_injury: true,
+	});
+
+	const handleInputChange = (event) => {
+		const fieldName = event.target.name;
+		const value =
+			event.target.type === "checkbox"
+				? event.target.checked
+				: event.target.value;
+
+		setReport({ ...report, [fieldName]: value });
+	};
+
+	console.log(report);
 
 	return (
 		<Container text>
 			<Form onSubmit={handleSubmit}>
-				<StaffDetailsForm />
-				<IncidentDetailsForm />
+				<Header as="h2">Staff Details</Header>
+				{questions.staff_details.map((question) => (
+					<FormField
+						question={question}
+						handleInputChange={handleInputChange}
+						key={question.name}
+					/>
+				))}
 
-				{/* Display based on form input */}
-				{typeof props.values !== "undefined"
-					? props.values.incident_injury && <InjuryDetailsForm />
-					: null}
-				{typeof props.values !== "undefined"
-					? props.values.incident_equip_damage && <EquipDamageForm />
-					: null}
-
-				{/* {} */}
-				<IncidentInvestigationForm />
+				{report.incident_injury && <InjuryDetailsForm />}
+				{report.incident_equip_damage && <EquipDamageForm />}
 
 				<Container style={{ textAlign: "center" }} text>
 					<Button type="submit">Submit</Button>
@@ -43,13 +56,4 @@ const ReportForm = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return state.form.report
-		? {
-				values: state.form.report.values,
-				submitSucceeded: state.form.report.submitSucceeded,
-		  }
-		: {};
-};
-
-export default connect(mapStateToProps)(ReportForm);
+export default ReportForm;
