@@ -6,7 +6,7 @@ const AppBar = () => {
 	return (
 		<Menu inverted>
 			<Container>
-				<Menu.Item as="a" header>
+				<Menu.Item as="a" href="/" header>
 					<Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
 					Global Acoustics
 				</Menu.Item>
