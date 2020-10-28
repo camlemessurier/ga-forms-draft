@@ -12,6 +12,8 @@ import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 
+import questions from "../questions";
+
 // Components
 import IncidentDetails from "./IncidentDetails";
 import StaffDetails from "./StaffDetails";
@@ -20,6 +22,7 @@ import EquipDamage from "./EquipDamage";
 import IncidentInvestigation from "./IncidentInvestigation";
 import ReportMenu from "./ReportMenu";
 import axios from "axios";
+import ReportSection from "./ReportSection";
 
 const ReportViewer = (props) => {
 	const [report, setReport] = useState({});
@@ -37,11 +40,34 @@ const ReportViewer = (props) => {
 		<Container text>
 			<ReportMenu report={report} />
 			<Header as="h2">{report.staff_name}</Header>
-			<StaffDetails report={report} />
-			<IncidentDetails report={report} />
-			<InjuryDetails report={report} />
-			<EquipDamage report={report} />
-			<IncidentInvestigation report={report} />
+
+			<Divider horizontal>
+				<Header as="h3">Staff Details</Header>
+			</Divider>
+			<ReportSection report={report} section={questions.staff_details} />
+
+			<Divider horizontal>
+				<Header as="h3">Incident Details</Header>
+			</Divider>
+			<ReportSection report={report} section={questions.incident_details} />
+
+			<Divider horizontal>
+				<Header as="h3">Injury Details</Header>
+			</Divider>
+			<ReportSection report={report} section={questions.injury_details} />
+
+			<Divider horizontal>
+				<Header as="h3">Equipment Damage Details</Header>
+			</Divider>
+			<ReportSection report={report} section={questions.equip_damage_details} />
+
+			<Divider horizontal>
+				<Header as="h3">Incident Investigation</Header>
+			</Divider>
+			<ReportSection
+				report={report}
+				section={questions.incident_investigation}
+			/>
 		</Container>
 	);
 };
