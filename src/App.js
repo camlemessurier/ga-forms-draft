@@ -20,7 +20,7 @@ const App = () => {
 
 				<Switch>
 					<Route exact path="/" component={Home} />
-					<Route exact path="/new">
+					<Route exact path="/report/new">
 						<ReportForm className="form" />
 					</Route>
 					<Route

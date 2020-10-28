@@ -1,25 +1,11 @@
-import React, { useState, Fragment, useEffect } from "react";
-import {
-	Form,
-	Container,
-	Header,
-	Button,
-	Divider,
-	Icon,
-	Table,
-} from "semantic-ui-react";
-import { Field, reduxForm } from "redux-form";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Container, Header, Divider } from "semantic-ui-react";
+
 import { useParams } from "react-router";
 
 import questions from "../questions";
 
 // Components
-import IncidentDetails from "./IncidentDetails";
-import StaffDetails from "./StaffDetails";
-import InjuryDetails from "./InjuryDetails";
-import EquipDamage from "./EquipDamage";
-import IncidentInvestigation from "./IncidentInvestigation";
 import ReportMenu from "./ReportMenu";
 import axios from "axios";
 import ReportSection from "./ReportSection";
@@ -51,15 +37,26 @@ const ReportViewer = (props) => {
 			</Divider>
 			<ReportSection report={report} section={questions.incident_details} />
 
-			<Divider horizontal>
-				<Header as="h3">Injury Details</Header>
-			</Divider>
-			<ReportSection report={report} section={questions.injury_details} />
+			{report.incident_injury === "true" && (
+				<>
+					<Divider horizontal>
+						<Header as="h3">Injury Details</Header>
+					</Divider>
+					<ReportSection report={report} section={questions.injury_details} />
+				</>
+			)}
 
-			<Divider horizontal>
-				<Header as="h3">Equipment Damage Details</Header>
-			</Divider>
-			<ReportSection report={report} section={questions.equip_damage_details} />
+			{report.incident_equip_damage === "true" && (
+				<>
+					<Divider horizontal>
+						<Header as="h3">Equipment Damage Details</Header>
+					</Divider>
+					<ReportSection
+						report={report}
+						section={questions.equip_damage_details}
+					/>
+				</>
+			)}
 
 			<Divider horizontal>
 				<Header as="h3">Incident Investigation</Header>

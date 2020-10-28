@@ -9,7 +9,7 @@ const Home = () => {
 				Incident Report Database
 			</Header>
 
-			<Button as="a" href="/new" style={{ marginTop: "2em" }}>
+			<Button as="a" href="/report/new" style={{ marginTop: "2em" }}>
 				New Report
 			</Button>
 

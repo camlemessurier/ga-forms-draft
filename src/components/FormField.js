@@ -11,6 +11,7 @@ const FormField = (props) => {
 						type={props.question.type}
 						name={props.question.name}
 						onChange={props.handleInputChange}
+						value={props.value}
 					/>
 				</label>
 			</Form.Field>
@@ -21,6 +22,8 @@ const FormField = (props) => {
 				control={Select}
 				label={props.question.text}
 				options={props.question.options}
+				placeholder={props.value}
+				onChange={props.handleInputChange}
 			/>
 		);
 	} else {
@@ -32,6 +35,7 @@ const FormField = (props) => {
 						type={props.question.type}
 						name={props.question.name}
 						onChange={props.handleInputChange}
+						value={props.value}
 					/>
 				</label>
 			</Form.Field>

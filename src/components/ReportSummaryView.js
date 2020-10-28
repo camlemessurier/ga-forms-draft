@@ -5,7 +5,6 @@ import { List } from "semantic-ui-react";
 import axios from "axios";
 
 const ReportSummaryView = () => {
-	const [pageNum, setPageNum] = useState(1);
 	const [reports, setReports] = useState([]);
 
 	useEffect(() => {

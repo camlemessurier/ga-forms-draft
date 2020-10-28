@@ -1,6 +1,5 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-//import ReportField from "./ReportField";
 
 // props: report object , section questions array
 const ReportSection = (props) => {

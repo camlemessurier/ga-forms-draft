@@ -18,7 +18,7 @@ const ReviewButton = (props) => {
 			onOpen={() => setOpen(true)}
 			open={open}
 			size="small"
-			trigger={<Button>Review</Button>}
+			trigger={<Button icon="check" content="Review" />}
 		>
 			<Header icon>
 				<Icon name="delete" />
